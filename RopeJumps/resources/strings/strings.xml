@@ -1,0 +1,9 @@
+<strings>
+    <string id="AppName">SimpleField</string>
+    <string id="TimerFieldText">Timer</string>
+    <string id="JumpsFieldText">Jumps</string>
+    <string id="CaloriesFieldText">Calories</string>
+    <string id="menu_label_1">Item 1</string>
+    <string id="menu_label_2">Item 2</string>
+</strings>
+
