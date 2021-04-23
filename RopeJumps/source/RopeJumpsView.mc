@@ -20,7 +20,7 @@ class RopeJumpsView extends WatchUi.View {
 	var latestElapsedTime;
 	hidden var seconds = 0;
 	hidden var minutes = 0;
-	
+		
 	
     // Set the label of the data field here.
     function initialize() {
@@ -51,7 +51,7 @@ class RopeJumpsView extends WatchUi.View {
     function onUpdate(dc) {
     
         System.println("[JumpRopeView] onUpdate");
-    
+        
 		calculateElapsedTime();
 		compute(Activity.getActivityInfo()); 
 		
@@ -78,6 +78,7 @@ class RopeJumpsView extends WatchUi.View {
         //draw two lines
         dc.drawLine(0, third_height, width, third_height);
       	dc.drawLine(0, third_height*2, width, third_height*2);
+      
     }
     
      // Set your layout here. Anytime the size of obscurity of

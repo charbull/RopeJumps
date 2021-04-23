@@ -90,14 +90,16 @@ class JumpFields {
 		// if the activity has restarted after "resume later", 
 		// load previously stored steps values
 		if (info != null) {
-	        calories = Lang.format("$1$", [app.getProperty(CAL).format("%01d")]); 
-	        numberOfJumps = Lang.format("$1$", [app.getProperty(JUMPS).format("%01d")]);
+	        calories = Lang.format("$1$", [CAL.format("%01d")]); 
+	        numberOfJumps = Lang.format("$1$", [JUMPS.format("%01d")]);
         } 
         
               // initialize accelerometer
         var options = {:period => 1, :sampleRate => 8, :enableAccelerometer => true};
         try {
             Sensor.registerSensorDataListener(method(:accelerationCallback), options);
+            //TODO: create field on the session
+            //https://developer.garmin.com/connect-iq/api-docs/Toybox/ActivityRecording/Session.html#createField-instance_function
             mSession.start();
         }
         catch(e) {
@@ -123,6 +125,16 @@ class JumpFields {
     // stop/pause
     function onActivityStop() {
     	timerRunning = false;
+    }
+    
+    // start/resume
+    function onSave() {
+    	mSession.save();
+    }
+    
+        // start/resume
+    function onDiscard() {
+    	mSession.discard();
     }
     
 }

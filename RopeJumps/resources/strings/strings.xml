@@ -5,5 +5,8 @@
     <string id="CaloriesFieldText">Calories</string>
     <string id="menu_label_1">Item 1</string>
     <string id="menu_label_2">Item 2</string>
+    <string id="Confirm">Confirm/Yes</string>
+    <string id="Cancel">Cancel/No</string>
+    <string id="DialogHeader">Confirm this?</string>
 </strings>
 
