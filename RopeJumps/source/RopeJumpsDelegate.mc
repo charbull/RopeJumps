@@ -15,7 +15,7 @@ class RopeJumpsDelegate extends WatchUi.BehaviorDelegate {
     function onMenu() {
         System.println("[RopeJumpsDelegate] onMenu");
     
-        WatchUi.pushView(new Rez.Menus.MainMenu(), ropeJumpsMenuDelegate, WatchUi.SLIDE_UP);
+        WatchUi.pushView(new Rez.Menus.ExitMenu(), ropeJumpsMenuDelegate, WatchUi.SLIDE_UP);
         return true;
     }
     
@@ -35,9 +35,13 @@ class RopeJumpsDelegate extends WatchUi.BehaviorDelegate {
     function onBack() {
     	System.println("[RopeJumpsDelegate] Onback");
         parentRopeJumpsView.onTimerPause();
-        ropeJumpsMenuDelegate.onBack();
+         WatchUi.pushView(new Rez.Menus.ExitMenu(), ropeJumpsMenuDelegate, WatchUi.SLIDE_UP);	
         
+        return true;
         //TODO(charbelk): use the the Activity.Session options
     }
+    
+    
+    
     
 }

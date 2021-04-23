@@ -16,30 +16,54 @@ class RopeJumpsMenuDelegate extends WatchUi.Menu2InputDelegate {
 
 	function onBack(){  
 	 System.println("[RopeJumpsMenuDelegate] OnBack");
-	 pushDialog();
+	 	 pushDialog();
+		return true;
+	 
+	}
 	
+		function onFooter(){  
+	 System.println("[RopeJumpsMenuDelegate] onFooter");
+	 	 pushDialog();
+		return true;
+	 
+	}
+	
+	
+				function onWrap(key){  
+	 System.println("[RopeJumpsMenuDelegate] onWrap");
+	 	 pushDialog();
+		return true;
+	 
+	}
+	
+	
+			function onTitle(){  
+	 System.println("[RopeJumpsMenuDelegate] onTitle");
+	 	 pushDialog();
+		return true;
+	 
 	}
 	
 	function onDone(){  
 	 System.println("[RopeJumpsMenuDelegate] onDone");
-	 pushDialog();
+		pushDialog();
+return true;
 	}
 
-	function onSelect(){  
-	 System.println("[RopeJumpsMenuDelegate] onSelect");
+	function onSelect(item){  
+	 System.println("[RopeJumpsMenuDelegate] onSelect: "+item);
 	 pushDialog();
+return true;
 	}
 
 
     function pushDialog() {
             dialog = new WatchUi.Confirmation(dialogHeaderString);
         WatchUi.pushView(dialog, new ConfirmationDialogDelegate(), WatchUi.SLIDE_IMMEDIATE);
-//            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
-        
         return false;
    	}
 
-
+}
 
 class ConfirmationDialogDelegate extends WatchUi.ConfirmationDelegate {
 
@@ -49,23 +73,13 @@ class ConfirmationDialogDelegate extends WatchUi.ConfirmationDelegate {
     }
 
     function onResponse(response) {
-    	var reponse;
-        if (response == WatchUi.CONFIRM_NO) {
-            reponse = WatchUi.loadResource(Rez.Strings.Cancel);
-        } else {
-            reponse = WatchUi.loadResource(Rez.Strings.Confirm);
-        }
-        System.println("[ConfirmationDialogDelegate]: "+response);
-    }
-}
-
-//    function onMenuItem(item) {
-//    System.println("OnMenu");
-//        if (item == "Onback") {
-//            System.println("item 1");
-//        } else if (item == :item_2) {
-//            System.println("item 2");
+//    var user;
+//        if (response == WatchUi.CONFIRM_NO) {
+//            user = WatchUi.loadResource(Rez.Strings.Cancel);
+//        } else {
+//            user = WatchUi.loadResource(Rez.Strings.Confirm);
 //        }
-//    }
-
-}
+        System.println("[ConfirmationDialogDelegate]: "+response);
+        return true;
+    }
+  }

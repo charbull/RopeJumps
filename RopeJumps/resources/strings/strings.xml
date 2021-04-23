@@ -3,10 +3,11 @@
     <string id="TimerFieldText">Timer</string>
     <string id="JumpsFieldText">Jumps</string>
     <string id="CaloriesFieldText">Calories</string>
-    <string id="menu_label_1">Item 1</string>
-    <string id="menu_label_2">Item 2</string>
-    <string id="Confirm">Confirm/Yes</string>
-    <string id="Cancel">Cancel/No</string>
+    <string id="Save">Save</string>
+    <string id="Discard">Discard</string>
+    <string id="Continue">Continue</string>
+    <string id="Confirm">Confirm</string>
+    <string id="Cancel">Cancel</string>
     <string id="DialogHeader">Confirm this?</string>
 </strings>
 

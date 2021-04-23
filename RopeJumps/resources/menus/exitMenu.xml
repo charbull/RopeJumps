@@ -1,0 +1,5 @@
+<menu id="ExitMenu">
+    <menu-item id="Save" label="@Strings.Save" />
+    <menu-item id="Discard" label="@Strings.Discard" />
+    <menu-item id="Continue" label="@Strings.Continue" />
+</menu>
