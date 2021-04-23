@@ -13,6 +13,8 @@ class RopeJumpsDelegate extends WatchUi.BehaviorDelegate {
     }
     
     function onMenu() {
+        System.println("[RopeJumpsDelegate] onMenu");
+    
         WatchUi.pushView(new Rez.Menus.MainMenu(), ropeJumpsMenuDelegate, WatchUi.SLIDE_UP);
         return true;
     }
@@ -23,6 +25,7 @@ class RopeJumpsDelegate extends WatchUi.BehaviorDelegate {
     // Call the start stop timer method on the parent view
     // when the select action occurs (start/stop button on most products)
     function onSelect() {
+    System.println("[RopeJumpsDelegate] onSelect");
         parentRopeJumpsView.startStopTimer();
         return true;
     }

@@ -33,8 +33,10 @@ class RopeJumpsMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function pushDialog() {
             dialog = new WatchUi.Confirmation(dialogHeaderString);
-        WatchUi.pushView(dialog, new ConfirmationDialogDelegate(), WatchUi.SLIDE_UP);
-        return true;
+        WatchUi.pushView(dialog, new ConfirmationDialogDelegate(), WatchUi.SLIDE_IMMEDIATE);
+//            WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+        
+        return false;
    	}
 
 
@@ -53,7 +55,7 @@ class ConfirmationDialogDelegate extends WatchUi.ConfirmationDelegate {
         } else {
             reponse = WatchUi.loadResource(Rez.Strings.Confirm);
         }
-        System.println(response);
+        System.println("[ConfirmationDialogDelegate]: "+response);
     }
 }
 

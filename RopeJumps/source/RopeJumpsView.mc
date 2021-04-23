@@ -162,9 +162,14 @@ class RopeJumpsView extends WatchUi.View {
     }
     
     function onTimerPause() {
+    System.println("[RopeJumpView] onTimerPause: "+timerPauseTime);
+   
+    if(timerPauseTime == null) {
     	timerPauseTime = Time.now().value();
         updateTimer.stop();
         WatchUi.requestUpdate();
+         System.println("[RopeJumpView] onTimerPause: updating ");
+      }
     }
     
      
@@ -185,7 +190,7 @@ class RopeJumpsView extends WatchUi.View {
     	/** Calculates the time from milliseconds and 
 	update latestElapsedTime with a formatted string "mm:ss". */
     function calculateElapsedTime(){
-    	if(timerStartTime != null) {
+    	if(timerStartTime != null && timerPauseTime == null) {
         	var milliseconds = Time.now().value() - timerStartTime;
     		seconds = milliseconds % 60 ;
 			minutes = milliseconds / 60;
