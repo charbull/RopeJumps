@@ -113,8 +113,6 @@ class JumpFields {
     	// store current values of steps on stop for later usage (e.g., resume later)
         app.setProperty(CAL, cal);
         app.setProperty(JUMPS, jumps);
-        Sensor.unregisterSensorDataListener();
-        mSession.stop();
     }
     
     // start/resume
@@ -129,11 +127,17 @@ class JumpFields {
     
     // start/resume
     function onSave() {
+        System.println("[JumpFields] OnSave");
+        	 Sensor.unregisterSensorDataListener();
+        mSession.stop();
     	mSession.save();
+
     }
     
         // start/resume
     function onDiscard() {
+            	 Sensor.unregisterSensorDataListener();
+        mSession.stop();
     	mSession.discard();
     }
     

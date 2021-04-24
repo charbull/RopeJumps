@@ -198,5 +198,11 @@ class RopeJumpsView extends WatchUi.View {
 		latestElapsedTime = Lang.format("$1$:$2$",
     		[minutes.format("%02d"), seconds.format("%02d")]); 
     }
+    
+       // start/resume
+    function onSave() {
+    System.println("[RopeJumpView] OnSave");
+    	jumpFields.onSave();
+    }
 
 }

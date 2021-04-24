@@ -8,19 +8,33 @@ class RopeJumpsDelegate extends WatchUi.BehaviorDelegate {
     
     function initialize(ropeJumpsView) {
         BehaviorDelegate.initialize();
-        ropeJumpsMenuDelegate = new RopeJumpsMenuDelegate(ropeJumpsView);
         parentRopeJumpsView = ropeJumpsView;
     }
     
-    function onMenu() {
-        System.println("[RopeJumpsDelegate] onMenu");
+//    function onMenu() {
+//        System.println("[RopeJumpsDelegate] onMenu");
+//    
+//        WatchUi.pushView(new Rez.Menus.ExitMenu(), new RopeJumpsMenuDelegate(), WatchUi.SLIDE_UP);
+//        return true;
+//    }
     
-        WatchUi.pushView(new Rez.Menus.ExitMenu(), ropeJumpsMenuDelegate, WatchUi.SLIDE_UP);
+    
+     // Detect Menu button input
+    function onKey(keyEvent) {
+        System.println(keyEvent.getKey()); // e.g. KEY_MENU = 7
         return true;
     }
+
+
+    function onPreviousPage() {
+    	System.println("[RopeJumpsDelegate] onPreviousPage");
+    	return true;
+    }
     
-    
-    
+      function onNextPage() {
+    	System.println("[RopeJumpsDelegate] onNextPage");
+    	return true;
+    }
 
     // Call the start stop timer method on the parent view
     // when the select action occurs (start/stop button on most products)
@@ -35,9 +49,8 @@ class RopeJumpsDelegate extends WatchUi.BehaviorDelegate {
     function onBack() {
     	System.println("[RopeJumpsDelegate] Onback");
         parentRopeJumpsView.onTimerPause();
-         WatchUi.pushView(new Rez.Menus.ExitMenu(), ropeJumpsMenuDelegate, WatchUi.SLIDE_UP);	
-        
-        return true;
+        WatchUi.pushView(new Rez.Menus.ExitMenu(), new RopeJumpsMenuDelegate(parentRopeJumpsView), WatchUi.SLIDE_IMMEDIATE);
+       return true;
         //TODO(charbelk): use the the Activity.Session options
     }
     

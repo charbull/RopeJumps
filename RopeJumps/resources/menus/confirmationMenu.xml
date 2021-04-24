@@ -1,4 +1,0 @@
-<menu id="confirmationMenu">
-    <menu-item id="Confirm" label="@Strings.Confirm" />
-    <menu-item id="Cancel" label="@Strings.Cancel" />
-</menu>
