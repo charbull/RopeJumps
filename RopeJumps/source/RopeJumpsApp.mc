@@ -11,7 +11,7 @@ class RopeJumpsApp extends Application.AppBase {
     function initialize() {
         AppBase.initialize();
         ropeJumpsView = new RopeJumpsView(); 
-        ropeJumpDelegate = new RopeJumpsDelegate(ropeJumpsView);
+        ropeJumpDelegate = new RopeJumpsDelegate(ropeJumpsView);       
     }
 
     // onStart() is called on application start up

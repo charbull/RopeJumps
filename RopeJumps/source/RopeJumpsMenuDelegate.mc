@@ -25,16 +25,21 @@ class RopeJumpsMenuDelegate extends WatchUi.Menu2InputDelegate {
 	 if(actionId == :Save) {
 	 	System.println("[RopeJumpsMenuDelegate] onSave: saving session");
 		//WatchUi.pushView(Application.getApp().ropeJumpsView, null, WatchUi.SLIDE_IMMEDIATE);
-//       var progressbar = new WatchUi.ProgressBar(
-//            "Saving ...",
-//            null
-//        );
-//        WatchUi.pushView(progressbar, new MyProgressDelegate(), WatchUi.SLIDE_RIGHT);
-		WatchUi.pushView(new ActionApplied("Activity Saved"), null, WatchUi.SLIDE_RIGHT);
-//				WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+       var progressBar = new WatchUi.ProgressBar(
+            "Saving ...",
+            0
+        );
+        WatchUi.pushView(progressBar, null, WatchUi.SLIDE_DOWN);
+		parentRopeJumpsView.onSave();
+		for(var i = 0 ; i<=100; i++){
+			progressBar.setProgress(i);
+		}
+	
+			//WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
+			//	WatchUi.pushView(new ActionApplied("Activity Saved"), null, WatchUi.SLIDE_RIGHT);
 				System.println("[RopeJumpsMenuDelegate] onSave: saved");
 				           	//TODO: save the session
-				parentRopeJumpsView.onSave();
+				
 				       	System.exit();
 
 		
@@ -101,11 +106,14 @@ class ConfirmationDialogDelegate extends WatchUi.ConfirmationDelegate {
 }
 
 class MyProgressDelegate extends WatchUi.BehaviorDelegate {
+
     function initialize() {
         BehaviorDelegate.initialize();
     }
 
     function onBack() {
+    	WatchUi.pushView(new ActionApplied("Activity Saved"), null, WatchUi.SLIDE_RIGHT);
+    
         return true;
     }
 }

@@ -29,20 +29,16 @@ class RopeJumpsView extends WatchUi.View {
         // Create our timer object that is used to drive display updates
         updateTimer = new Timer.Timer();
 
-            // Update the display each second.
-            updateTimer.start(method(:requestUpdate), 1000, true);
-        
+       // Update the display each second.
+       updateTimer.start(method(:requestUpdate), 1000, true);
     }
 
-    // The given info object contains all the current workout
-    // information. Calculate a value and return it in this method.
-    // Note that compute() and onUpdate() are asynchronous, and there is no
-    // guarantee that compute() will be called before onUpdate().
-    function compute(info) {
-    	      System.println("[JumpRopeView] info");
     	
-        jumpFields.compute(info);        
-    }
+   function compute() {
+   		var activityMonitorInfo = ActivityMonitor.getInfo();
+		var activityInfo = Activity.getActivityInfo();
+        jumpFields.compute(activityInfo, activityMonitorInfo); 
+   }
     
  
     
@@ -53,7 +49,8 @@ class RopeJumpsView extends WatchUi.View {
         System.println("[JumpRopeView] onUpdate");
         
 		calculateElapsedTime();
-		compute(Activity.getActivityInfo()); 
+		compute();
+		       
 		
         // Set the foreground color and value
         var timerValue = View.findDrawableById("timerValue");
@@ -87,7 +84,7 @@ class RopeJumpsView extends WatchUi.View {
       
       dc.clear();
       
-      compute(Activity.getActivityInfo()); 
+      compute();        
       
       System.println("[JumpRopeView] onLayout");
       
@@ -202,7 +199,7 @@ class RopeJumpsView extends WatchUi.View {
        // start/resume
     function onSave() {
     System.println("[RopeJumpView] OnSave");
-    	jumpFields.onSave();
+    	return jumpFields.onSave();
     }
 
 }

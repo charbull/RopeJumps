@@ -12,11 +12,16 @@ class JumpFields {
 	var calories = "--";
 	hidden var cal = 0;
 	hidden var jumps = 0;
+	//jumps from acceleration
+	hidden var jumpsAcc = 0;
+	hidden var lastAcceleration = 0;
+	
 	hidden var timerRunning = false;
 	const CAL = 1;
 	const JUMPS = 2;
 	var mSession;
 	var mLogger;	
+	hidden var wholeDaySteps = 0;
 	
 	 // Constructor
     function initialize() {
@@ -33,23 +38,50 @@ class JumpFields {
 	
 	    // Callback to receive accel data
     function accelerationCallback(sensorData) {
-   		var xAccel = sensorData.accelerometerData.x;
-    	var yAccel = sensorData.accelerometerData.y;
     	var zAccel = sensorData.accelerometerData.z;
-    	System.println("x: " + xAccel + ", y: " + yAccel+ ", z: " + zAccel);
-    	
+    	System.println("z: " + zAccel);
+		var currentAcc = 0;
+    	if(timerRunning) {
+    		for(var i = 0; i< zAccel.size();i++){
+    	  		 currentAcc = zAccel[i];
+    	  		 System.println("[JumpField]: i "+i+", currentAcc: "+currentAcc+", lastAcceleration: "+lastAcceleration);
+    	  		 
+    	  		if(lastAcceleration > 0 && currentAcc < 0){
+    	    		jumpsAcc = jumpsAcc + 1;
+    	  		} else if (lastAcceleration < 0 && currentAcc > 0){
+    	    		jumpsAcc = jumpsAcc + 1;
+    	 		}
+    	 		lastAcceleration = currentAcc;
+    	      	System.println("[JumpField]: jumpsAcc "+jumpsAcc);
+    	  	}
+    	}	  	
     }
     
 
     //TODO: need the heart rate here and the accelerator
-    function calculateJumps(info) {
-    	var hr = 0;
-    	if (info has :currentHeartRate && 
-    		info.currentHeartRate != null 
-    		&& info.currentHeartRate > 0) {
-			if (hr != info.currentHeartRate) {
-				hr = info.currentHeartRate;
-				jumps = jumps + 1;
+    function calculateJumps(activityInfo, activityMonitorInfo) {
+    	// delta steps but the user might just have walked and not jumped.
+		var deltaSteps = activityMonitorInfo.steps - wholeDaySteps;
+		System.println("[JumpField]: info.steps: "+activityMonitorInfo.steps+ " , wholeDaySteps: "+wholeDaySteps);
+
+		var hr = 0;
+		
+    	if (activityInfo has :currentHeartRate && 
+    		activityInfo.currentHeartRate != null 
+    		&& activityInfo.currentHeartRate > 0) {
+			if (hr != activityInfo.currentHeartRate) {
+				hr = activityInfo.currentHeartRate;
+				
+				if(jumpsAcc == deltaSteps) {
+					jumps = jumps + jumpsAcc;
+					System.println("[JumpField]: deltaSteps == jumps == "+jumps);
+				} 
+				// the acceleration and the deltaSteps are different take the average
+				else {
+					jumps = deltaSteps == 0? jumps + jumpsAcc : jumps + (jumpsAcc + deltaSteps)/2;
+					System.println("[JumpField]: deltaSteps == "+deltaSteps+" \n deltaSteps == "+deltaSteps+"\n calculated jumps=: "+jumps);
+				}
+				
 			}
       	numberOfJumps = Lang.format("$1$", [jumps.format("%01d")]);
        	}      
@@ -67,25 +99,24 @@ class JumpFields {
        	}      
     }
     
-    function compute(info) {
-    
+    function compute(activityInfo, activityMonitorInfo) {
+    	var info = Activity.getActivityInfo();
     	if(!timerRunning) {
     		calories = (cal == 0) ? "--" : Lang.format("$1$", [cal.format("%01d")]); 
     		numberOfJumps = (jumps == 0 )? "--" : Lang.format("$1$", [jumps.format("%01d")]);    		
     	} else {
-    		if (info has :Workout && 
-    			info.Workout != null) {
-    		System.println(info.Workout.activeStep);
-    		}
-    		calculateJumps(info);
-    		calculateCalories(info);
+    		calculateJumps(activityInfo, activityMonitorInfo);
+    		calculateCalories(activityInfo);
     	}
     }
     
     function onStart(app) {
         System.println("[JumpFields] On Start");
     
-		var info = Activity.getActivityInfo();
+		var info = ActivityMonitor.getInfo();
+		//The step count since midnight for the current day in number of steps. 
+		//Value may be null.
+    	var wholeDaySteps = (info.steps != null)? info.steps : 0 ;
 		
 		// if the activity has restarted after "resume later", 
 		// load previously stored steps values
@@ -105,6 +136,7 @@ class JumpFields {
         catch(e) {
             System.println(e.getErrorMessage());
         }
+        return true;
         
     }
     
@@ -113,32 +145,44 @@ class JumpFields {
     	// store current values of steps on stop for later usage (e.g., resume later)
         app.setProperty(CAL, cal);
         app.setProperty(JUMPS, jumps);
+        return true;
     }
     
-    // start/resume
+    // start
     function onActivityStart() {
     	timerRunning = true;
+    	if(!mSession.isRecording()){
+        	mSession.start();
+        }
+        return true;
     }
     
     // stop/pause
     function onActivityStop() {
     	timerRunning = false;
+    	if(mSession.isRecording()){
+        	mSession.stop();
+        }
+        return true;
     }
     
     // start/resume
     function onSave() {
         System.println("[JumpFields] OnSave");
-        	 Sensor.unregisterSensorDataListener();
-        mSession.stop();
-    	mSession.save();
+       	Sensor.unregisterSensorDataListener();
+       	if(mSession.isRecording()){
+        	mSession.stop();
+        }
+    	return mSession.save();
 
     }
     
-        // start/resume
     function onDiscard() {
-            	 Sensor.unregisterSensorDataListener();
-        mSession.stop();
-    	mSession.discard();
+        Sensor.unregisterSensorDataListener();
+		if(mSession.isRecording()){
+        	mSession.stop();
+        }   
+        return mSession.discard();
     }
     
 }
