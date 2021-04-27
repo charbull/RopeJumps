@@ -26,16 +26,6 @@ class RopeJumpsDelegate extends WatchUi.BehaviorDelegate {
     }
 
 
-    function onPreviousPage() {
-    	System.println("[RopeJumpsDelegate] onPreviousPage");
-    	return true;
-    }
-    
-      function onNextPage() {
-    	System.println("[RopeJumpsDelegate] onNextPage");
-    	return true;
-    }
-
     // Call the start stop timer method on the parent view
     // when the select action occurs (start/stop button on most products)
     function onSelect() {

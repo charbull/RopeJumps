@@ -22,6 +22,8 @@ class JumpFields {
 	var mSession;
 	var mLogger;	
 	hidden var wholeDaySteps = 0;
+	hidden var lastDeltaSteps = 0;
+	hidden var wholeDayCalories = 0;
 	
 	 // Constructor
     function initialize() {
@@ -38,23 +40,23 @@ class JumpFields {
 	
 	    // Callback to receive accel data
     function accelerationCallback(sensorData) {
-    	var zAccel = sensorData.accelerometerData.z;
-    	System.println("z: " + zAccel);
-		var currentAcc = 0;
-    	if(timerRunning) {
-    		for(var i = 0; i< zAccel.size();i++){
-    	  		 currentAcc = zAccel[i];
-    	  		 System.println("[JumpField]: i "+i+", currentAcc: "+currentAcc+", lastAcceleration: "+lastAcceleration);
-    	  		 
-    	  		if(lastAcceleration > 0 && currentAcc < 0){
-    	    		jumpsAcc = jumpsAcc + 1;
-    	  		} else if (lastAcceleration < 0 && currentAcc > 0){
-    	    		jumpsAcc = jumpsAcc + 1;
-    	 		}
-    	 		lastAcceleration = currentAcc;
-    	      	System.println("[JumpField]: jumpsAcc "+jumpsAcc);
-    	  	}
-    	}	  	
+//    	var zAccel = sensorData.accelerometerData.z;
+//    	System.println("z: " + zAccel);
+//		var currentAcc = 0;
+//    	if(timerRunning) {
+//    		for(var i = 0; i< zAccel.size();i++){
+//    	  		 currentAcc = zAccel[i];
+//    	  		 System.println("[JumpField]: i "+i+", currentAcc: "+currentAcc+", lastAcceleration: "+lastAcceleration);
+//    	  		 
+//    	  		if(lastAcceleration > 0 && currentAcc < 0){
+//    	    		jumpsAcc = jumpsAcc + 1;
+//    	  		} else if (lastAcceleration < 0 && currentAcc > 0){
+//    	    		jumpsAcc = jumpsAcc + 1;
+//    	 		}
+//    	 		lastAcceleration = currentAcc;
+//    	      	System.println("[JumpField]: jumpsAcc "+jumpsAcc);
+//    	  	}
+//    	}	  	
     }
     
 
@@ -72,15 +74,19 @@ class JumpFields {
 			if (hr != activityInfo.currentHeartRate) {
 				hr = activityInfo.currentHeartRate;
 				
-				if(jumpsAcc == deltaSteps) {
-					jumps = jumps + jumpsAcc;
-					System.println("[JumpField]: deltaSteps == jumps == "+jumps);
-				} 
-				// the acceleration and the deltaSteps are different take the average
-				else {
-					jumps = deltaSteps == 0? jumps + jumpsAcc : jumps + (jumpsAcc + deltaSteps)/2;
-					System.println("[JumpField]: deltaSteps == "+deltaSteps+" \n deltaSteps == "+deltaSteps+"\n calculated jumps=: "+jumps);
+				if( lastDeltaSteps != deltaSteps) {
+				jumps = jumps + (deltaSteps - lastDeltaSteps);
+				lastDeltaSteps = deltaSteps;
 				}
+//				if(jumpsAcc == deltaSteps) {
+//					jumps = jumps + jumpsAcc;
+//					System.println("[JumpField]: deltaSteps == jumps == "+jumps);
+//				} 
+//				// the acceleration and the deltaSteps are different take the average
+//				else {
+//					jumps = deltaSteps == 0? jumps + jumpsAcc : jumps + (jumpsAcc + deltaSteps)/2;
+//					System.println("[JumpField]: deltaSteps == "+deltaSteps+" \n deltaSteps == "+deltaSteps+"\n calculated jumps=: "+jumps);
+//				}
 				
 			}
       	numberOfJumps = Lang.format("$1$", [jumps.format("%01d")]);
@@ -93,7 +99,7 @@ class JumpFields {
     		info.calories != null 
     		&& info.calories > 0) {
 			if (cal != info.calories) {
-				cal = info.calories;
+				cal = info.calories - wholeDayCalories;
 			}
          	calories = Lang.format("$1$", [cal.format("%01d")]); 
        	}      
@@ -113,14 +119,22 @@ class JumpFields {
     function onStart(app) {
         System.println("[JumpFields] On Start");
     
-		var info = ActivityMonitor.getInfo();
+		var activityMonitorInfo = ActivityMonitor.getInfo();
 		//The step count since midnight for the current day in number of steps. 
 		//Value may be null.
-    	var wholeDaySteps = (info.steps != null)? info.steps : 0 ;
+    	wholeDaySteps = (activityMonitorInfo.steps != null)? activityMonitorInfo.steps : 0 ;
+    	System.println("[JumpFields] On Start, wholeDaySteps: "+wholeDaySteps);
+    	
+    	var activityInfo = Activity.getActivityInfo();
+    	
+    	wholeDayCalories = (activityInfo.calories != null)? activityInfo.calories : 0 ;
+    	System.println("[JumpFields] On Start, wholeDayCalories: "+wholeDayCalories);
+    	
+    	
 		
 		// if the activity has restarted after "resume later", 
 		// load previously stored steps values
-		if (info != null) {
+		if (activityMonitorInfo != null) {
 	        calories = Lang.format("$1$", [CAL.format("%01d")]); 
 	        numberOfJumps = Lang.format("$1$", [JUMPS.format("%01d")]);
         } 

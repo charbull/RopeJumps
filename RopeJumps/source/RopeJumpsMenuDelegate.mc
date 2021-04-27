@@ -38,8 +38,6 @@ class RopeJumpsMenuDelegate extends WatchUi.Menu2InputDelegate {
 			//WatchUi.popView(WatchUi.SLIDE_IMMEDIATE);
 			//	WatchUi.pushView(new ActionApplied("Activity Saved"), null, WatchUi.SLIDE_RIGHT);
 				System.println("[RopeJumpsMenuDelegate] onSave: saved");
-				           	//TODO: save the session
-				
 				       	System.exit();
 
 		
@@ -52,7 +50,7 @@ class RopeJumpsMenuDelegate extends WatchUi.Menu2InputDelegate {
 
     function pushDialog(action) {
             dialog = new WatchUi.Confirmation(action);
-        WatchUi.pushView(dialog, new ConfirmationDialogDelegate(), WatchUi.SLIDE_IMMEDIATE);
+        WatchUi.pushView(dialog, new ConfirmationDialogDelegate(parentRopeJumpsView), WatchUi.SLIDE_IMMEDIATE);
         //return false;
    	}
 
@@ -60,9 +58,11 @@ class RopeJumpsMenuDelegate extends WatchUi.Menu2InputDelegate {
 
 class ConfirmationDialogDelegate extends WatchUi.ConfirmationDelegate {
 
+	var parentRopeJumpsView;
 
-    function initialize() {
+    function initialize(ropeJumpsView) {
         ConfirmationDelegate.initialize();
+        parentRopeJumpsView = ropeJumpsView;
     }
 
     function onResponse(response) {
@@ -71,7 +71,7 @@ class ConfirmationDialogDelegate extends WatchUi.ConfirmationDelegate {
         } else {
             WatchUi.pushView(new ActionApplied("Discarded"), null, WatchUi.SLIDE_RIGHT);
            	System.println("[RopeJumpsMenuDelegate] onSave: Discarded");
-           	//TODO: discard the session
+           	parentRopeJumpsView.onDiscard();
 			System.exit();
         }      
         return true;

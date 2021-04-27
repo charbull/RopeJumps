@@ -201,5 +201,10 @@ class RopeJumpsView extends WatchUi.View {
     System.println("[RopeJumpView] OnSave");
     	return jumpFields.onSave();
     }
+    
+    function onDiscard() {
+    System.println("[RopeJumpView] onDiscard");
+    	return jumpFields.onDiscard();
+    }
 
 }
